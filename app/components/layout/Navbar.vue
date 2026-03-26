@@ -1,0 +1,65 @@
+<script setup>
+import { ShoppingCart, User, UserRoundPen } from 'lucide-vue-next';
+
+</script>
+
+
+<template>
+
+    <!-- 1. WARNING BAR -->
+    <div class="bg-black text-white text-center text-2xl font-bold py-4 ">
+      WARNING: This product contains nicotine. Nicotine is an addictive chemical.
+    </div>
+
+  <header class="sticky top-0 z-50 bg-white shadow-[0_5px_10px_rgba(0,0,0,0.2)] shadow-opacity-50">
+    <!-- 2. PROMO BAR -->
+    <div class="bg-purple-900 text-white text-center text-sm space-y-4 py-4 font-medium">
+      <div>
+        Free Shipping $95+ | Code: FREESHIP
+      </div>
+      <div class="underline cursor-pointer">
+        New Coupon Codes - Free Shipping & More
+      </div>
+    </div>
+  
+     <div class="">
+      <!-- 4. MAIN HEADER -->
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
+
+      <!-- LOGO -->
+      <NuxtLink to="/" class="text-2xl font-bold">
+        HookahStore
+      </NuxtLink>
+
+      <!-- SEARCH BAR -->
+      <div class="flex-1 hidden md:block">
+        <input type="text" placeholder="Search..." class="w-full border rounded-lg px-4 py-2  focus:outline-none focus:shadow-[0_0_3px_#3b82f6]" />
+      </div>
+
+      <!-- RIGHT SIDE -->
+      <div class="flex items-center gap-4">
+        <NuxtLink to="/login">
+          <UserRoundPen class="w-6 h-6" />
+        </NuxtLink>
+        <NuxtLink to="/cart">
+          <ShoppingCart class="w-6 h-6" />
+         </NuxtLink>
+      </div>
+    </div>
+     </div>
+
+    <!-- 5. NAV MENU -->
+    <div class="border-t">
+      <div class="max-w-7xl mx-auto px-6 py-6 flex gap-6 py-3 text-sm font-medium overflow-x-auto ">
+        <NuxtLink to="/products" class="text-sm text-transform: uppercase hover:text-gray-700" >Hookahs</NuxtLink>
+        <NuxtLink to="/products" class="text-sm text-transform: uppercase hover:text-gray-700">Shisha Tobacco</NuxtLink>
+        <NuxtLink to="/products" class="text-sm text-transform: uppercase hover:text-gray-700">Hookah Charcoal</NuxtLink>
+        <NuxtLink to="/products" class="text-sm text-transform: uppercase hover:text-gray-700">Hookah Accessories</NuxtLink>
+        <NuxtLink to="/products" class="text-sm text-transform: uppercase hover:text-gray-700">Nicotine Pouches</NuxtLink>
+        <NuxtLink to="/products" class="text-sm text-transform: uppercase hover:text-gray-700">Electronic</NuxtLink>
+        <NuxtLink to="/products" class="text-sm text-transform: uppercase hover:text-gray-700">Snoop Dogg</NuxtLink>
+        <NuxtLink to="/products" class="text-sm text-transform: uppercase hover:text-gray-700">Shop Wholesale</NuxtLink>
+      </div>
+    </div>
+  </header>
+</template>
