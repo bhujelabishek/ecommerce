@@ -38,10 +38,19 @@ import { ShoppingCart, User, UserRoundPen } from 'lucide-vue-next';
 
       <!-- RIGHT SIDE -->
       <div class="flex items-center gap-4">
-        <NuxtLink to="/login">
-          <UserRoundPen class="w-6 h-6" />
+        <NuxtLink to="/login" class="px-6 py-2 rounded-full text-black bg-white border border-gray-300  
+        hover:shadow-[0_0_5px_black] hover:shadow-opacity-50 hover:bg-black hover:text-white transform hover:scale-105 transition duration-300
+       
+        ">
+          Login
+          <!-- <UserRoundPen class="w-6 h-6" /> -->
         </NuxtLink>
-        <NuxtLink to="/cart">
+        <NuxtLink to="/login" class="px-6 py-2 rounded-full text-white bg-black border border-gray-300 
+        hover:shadow-[0_0_5px_black] hover:shadow-opacity-0 hover:bg-white hover:text-black transform hover:scale-105 transition duration-300">
+          SignUp
+        </NuxtLink>
+        <NuxtLink to="/cart" 
+         class="inline-block transition duration-300 transform hover:scale-110">
           <ShoppingCart class="w-6 h-6" />
          </NuxtLink>
       </div>
