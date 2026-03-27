@@ -4,6 +4,6 @@ export const hashPassword= ((password) => {
     return bycrpt.hash(password, 10);
 })
 
-export const comparedPassword= ((password, hash) => {
+export const comparePassword= ((password, hash) => {
     return bycrpt.compare(password, hash);
 })
