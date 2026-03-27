@@ -10,6 +10,8 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "jsonwebtoken": "^9.0.3",
     "lucide-vue-next": "^1.0.0",
     "nuxt": "^4.4.2",
     "pg": "^8.20.0",

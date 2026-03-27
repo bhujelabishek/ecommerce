@@ -12,10 +12,12 @@ onMounted(() => {
 
 
 <template>
-  <NuxtLayout/>
-  <Loader v-if="loading"/>
-  <NuxtPage v-else />
-    <NuxtLoadingIndicator/>
-    
-  <NuxtLayout/>
+  <div>
+    <NuxtLayout>
+      <Loader v-if="loading" />
+      <NuxtPage v-else />
+      <NuxtLoadingIndicator />
+
+    </NuxtLayout>
+  </div>
 </template>
