@@ -34,16 +34,22 @@ const validate = () => {
 const handleLogin = async () => {
   if (!validate()) return
 
-  try {
-    const res = await login(email.value, password.value)
+   try {
+    const { user } = await login(email.value, password.value)
 
-    console.log('LOGIN SUCCESS:', res)
+    console.log('USER FROM LOGIN:', user)
+    console.log('ROLE:', user?.role)
 
-    navigateTo('/') // ✅ redirect
-
-  } catch (err) {
+    if (user?.role === 'admin') {
+      console.log('GOING ADMIN')
+      await navigateTo('/admin/dashboard')
+    } else {
+      console.log('GOING HOME')
+      await navigateTo('/')
+    }
+  }
+    catch (err) {
     console.error(err)
-
     errors.general =
       err.data?.message || 'Invalid email or password'
   }

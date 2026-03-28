@@ -1,6 +1,7 @@
 export const useAuth = () => {
 
   // 🔥 GLOBAL STATE (reactive across app)
+  
   const token = useState('auth_token', () => null)
 
   // ✅ INIT (client only)
@@ -30,7 +31,23 @@ export const useAuth = () => {
 
     token.value = res.token // 🔥 THIS FIXES NAVBAR
 
-    return res
+     // 🔥 WAIT A BIT (important sometimes)
+  await new Promise(resolve => setTimeout(resolve, 50))
+
+
+    // 🔥 GET USER AFTER LOGIN
+    const user = await getUser()
+      console.log('USER:', user)
+
+    // 🔥 REDIRECT BASED ON ROLE
+    // if (user?.role === 'admin') {
+    //   await navigateTo('/admin/dashboard')
+    // } else {
+    //   await navigateTo('/')
+    // }
+
+
+    return {res, user}
   }
 
   // ✅ CHECK LOGIN (reactive)
