@@ -1,14 +1,13 @@
 <script setup>
 import { ShoppingCart, User, UserRoundPen } from 'lucide-vue-next';
 
-
 const { token, logout } = useAuth();
 
 </script>
 
 
 <template>
-
+   
   <!-- 1. WARNING BAR -->
   <div class="bg-black text-white text-center text-2xl font-bold py-4 m-1 ">
     WARNING: This product contains nicotine. Nicotine is an addictive chemical.
@@ -92,5 +91,7 @@ const { token, logout } = useAuth();
         <NuxtLink to="/products" class="text-sm text-transform: uppercase hover:text-gray-700">Shop Wholesale</NuxtLink>
       </div>
     </div>
+    
   </header>
+
 </template>

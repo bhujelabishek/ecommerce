@@ -1,4 +1,7 @@
 <script setup>
+
+import Swal from 'sweetalert2'
+
 definePageMeta({
     layout: 'admins'
 })
@@ -83,6 +86,95 @@ const createProduct = async () => {
         alert(err?.data?.message || err.message)
     }
 }
+// DELETE PRODUCT
+const deleteProduct = async (id) => {
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: "This action cannot be undone!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+  })
+
+  if (result.isConfirmed) {
+    try {
+      await $fetch(`/api/admin/products/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      })
+
+      fetchProducts() // refresh table
+
+      Swal.fire(
+        'Deleted!',
+        'The product has been deleted.',
+        'success'
+      )
+    } catch (err) {
+      console.error(err)
+      Swal.fire('Error', 'Something went wrong!', 'error')
+    }
+  }
+}
+
+// EDIT PRODUCT (opens modal with prefilled data)
+const editProduct = async (id) => {
+    const product = await $fetch(`/api/admin/products/${id}`, {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    })
+
+    Object.assign(form, product)
+    file.value = null
+    showModal.value = true
+    editingId.value = id
+}
+
+// UPDATE PRODUCT
+const updateProduct = async () => {
+    try {
+        let imagePath = form.image
+
+        if (file.value) {
+            const fd = new FormData()
+            fd.append('file', file.value)
+
+            const uploadRes = await $fetch('/api/upload', {
+                method: 'POST',
+                body: fd
+            })
+
+            imagePath = uploadRes.path
+        }
+
+        await $fetch(`/api/admin/products/${editingId.value}`, {
+            method: 'PUT',
+            body: {
+                ...form,
+                price: Number(form.price),
+                stock: Number(form.stock),
+                category_id: Number(form.category_id),
+                rating: Number(form.rating),
+                image: imagePath
+            },
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        })
+
+        showModal.value = false
+        editingId.value = null
+        fetchProducts()
+        alert('Product updated')
+    } catch (err) {
+        console.error(err)
+        alert('Error updating product')
+    }
+}
+
+const editingId = ref(null) // keep track of which product is being edited
 </script>
 
 <template>
@@ -102,7 +194,7 @@ const createProduct = async () => {
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="p-4 text-left">ID</th>
-                        <th >Name</th>
+                        <th>Name</th>
                         <th>Description</th>
                         <th>Price</th>
                         <th>Stock</th>
@@ -137,13 +229,12 @@ const createProduct = async () => {
                         </td>
 
                         <td class="space-x-2">
-                            <NuxtLink :to="`/admin/products/${p.id}`"
-                            class="inline-block px-4 py-2 bg-white text-blue-500 rounded-lg hover:bg-blue-500 hover:text-white hover:shadow-[0_0_10px_blue] transform hover:scale-105 transition duration-300 ">
-                            Edit</NuxtLink>
-                           
-                            <button @click="deleteProduct(p.id)" 
-                              class="px-4 py-2 bg-white text-red-500 rounded-lg hover:bg-red-500 hover:text-white hover:shadow-[0_0_5px_red] transform hover:scale-105 transition duration-300 "
-                            >
+                            <button @click="editProduct(p.id)"
+                                class="inline-block px-4 py-2 bg-white text-blue-500 rounded-lg hover:bg-blue-500 hover:text-white hover:shadow-[0_0_10px_blue] transform hover:scale-105 transition duration-300">
+                                Edit
+                            </button>
+                            <button @click="deleteProduct(p.id)"
+                                class="px-4 py-2 bg-white text-red-500 rounded-lg hover:bg-red-500 hover:text-white hover:shadow-[0_0_5px_red] transform hover:scale-105 transition duration-300">
                                 Delete
                             </button>
                         </td>

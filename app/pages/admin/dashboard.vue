@@ -4,6 +4,24 @@
 definePageMeta({
     layout: 'admins'
 })
+
+const users = ref([])
+
+// Fetch all users
+const fetchUsers = async () => {
+    users.value = await $fetch('/api/admin/userss')
+}
+onMounted(fetchUsers)
+
+const products=ref([]);
+
+const fetchProducts = async () => {
+    const res = await $fetch('/api/admin/products')
+    products.value = res
+}
+
+onMounted(fetchProducts)
+
 </script>
 
 <template>
@@ -21,14 +39,15 @@ definePageMeta({
       <h2>320</h2>
     </div>
 
+
     <div class="card">
-      <p>Users</p>
-      <h2>1,200</h2>
+      <p>Total Users</p>
+      <h2>{{ users.length }}</h2>
     </div>
 
     <div class="card">
       <p>Products</p>
-      <h2>85</h2>
+      <h2>{{products.length}}</h2>
     </div>
 
   </div>
