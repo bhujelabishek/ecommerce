@@ -24,17 +24,24 @@ const route = useRoute()
           Dashboard
         </NuxtLink>
 
+         <NuxtLink to="/admin/users" class="nav-link">
+          Users
+        </NuxtLink>
+
+
         <NuxtLink to="/admin/products" class="nav-link">
           Products
+        </NuxtLink>
+
+         <NuxtLink to="/admin/categories" class="nav-link">
+          Categories
         </NuxtLink>
 
         <NuxtLink to="/admin/orders" class="nav-link">
           Orders
         </NuxtLink>
 
-        <NuxtLink to="/admin/users" class="nav-link">
-          Users
-        </NuxtLink>
+       
 
       </nav>
 

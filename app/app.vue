@@ -1,24 +1,16 @@
 <script setup>
-// import { ref, onMounted } from 'vue'
+// const { initAuth } = useAuth()
 
-const loading = ref(true);
-
-// onMounted(() => {
-//   setTimeout(() => {
-//     loading.value = false
-//   }, 1000) // simulate loading
-// })
-
-
+// await initAuth()
 </script>
 
 
 <template>
   <div>
     <NuxtLayout>
-      <!-- <Loader v-if="loading" />
-      <NuxtPage v-else /> -->
-      <NuxtLoadingIndicator />
+      <!-- <Loader v-if="loading" /> -->
+      <!-- <NuxtPage v-else /> -->
+      <!-- <NuxtLoadingIndicator /> -->
       <NuxtPage/>
     </NuxtLayout>
   </div>

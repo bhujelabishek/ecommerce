@@ -5,18 +5,15 @@ export default defineEventHandler(async (event) => {
   const authHeader = getHeader(event, 'authorization')
   const token = authHeader?.split(' ')[1]
   if (!token) throw createError({ statusCode: 401, message: 'Unauthorized' })
-
   const payload = verifyToken(token)
   if (payload.role !== 'admin') throw createError({ statusCode: 403, message: 'Forbidden' })
 
-  const { name, parent_id, image } = await readBody(event)
-  if (!name) throw createError({ statusCode: 400, message: 'Name required' })
+  const id = getRouterParam(event, 'id')
+  const { status } = await readBody(event)
 
   const result = await pool.query(
-    `INSERT INTO categories (name, parent_id, image, is_active)
-     VALUES ($1, $2, $3, true) RETURNING *`,
-    [name, parent_id || null, image || null]
+    `UPDATE orders SET status = $1 WHERE id = $2 RETURNING *`,
+    [status, id]
   )
-
   return result.rows[0]
 })

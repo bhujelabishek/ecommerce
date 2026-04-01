@@ -10,10 +10,8 @@ const errors = reactive({
 
 const { login } = useAuth()
 
-// validation
 const validate = () => {
   let valid = true
-
   errors.email = ''
   errors.password = ''
   errors.general = ''
@@ -22,7 +20,6 @@ const validate = () => {
     errors.email = 'Email is required'
     valid = false
   }
-
   if (!password.value) {
     errors.password = 'Password is required'
     valid = false
@@ -34,24 +31,22 @@ const validate = () => {
 const handleLogin = async () => {
   if (!validate()) return
 
-   try {
+  try {
     const { user } = await login(email.value, password.value)
 
-    console.log('USER FROM LOGIN:', user)
-    console.log('ROLE:', user?.role)
+    if (!user) {
+      errors.general = 'Login failed, please try again'
+      return
+    }
 
     if (user?.role === 'admin') {
-      console.log('GOING ADMIN')
       await navigateTo('/admin/dashboard')
     } else {
-      console.log('GOING HOME')
       await navigateTo('/')
     }
-  }
-    catch (err) {
+  } catch (err) {
     console.error(err)
-    errors.general =
-      err.data?.message || 'Invalid email or password'
+    errors.general = err.data?.message || 'Invalid email or password'
   }
 }
 </script>
@@ -60,32 +55,26 @@ const handleLogin = async () => {
   <LayoutNavbar />
 
   <div class="max-w-md mx-auto py-20 space-y-5">
-
     <h1 class="text-2xl font-bold">Login</h1>
 
-    <!-- EMAIL -->
     <div>
       <input v-model="email" placeholder="Email" class="input" />
       <p class="error">{{ errors.email }}</p>
     </div>
 
-    <!-- PASSWORD -->
     <div>
       <input v-model="password" type="password" placeholder="Password" class="input" />
       <p class="error">{{ errors.password }}</p>
     </div>
 
-    <!-- GENERAL ERROR -->
     <p class="error text-center">{{ errors.general }}</p>
 
-    <!-- BUTTON -->
     <button
       @click="handleLogin"
       class="bg-black text-white w-full py-3 rounded hover:bg-gray-800"
     >
       Login
     </button>
-
   </div>
 
   <LayoutFooter />
@@ -95,7 +84,6 @@ const handleLogin = async () => {
 .input {
   @apply border w-full p-2 rounded;
 }
-
 .error {
   @apply text-red-500 text-sm mt-1;
 }

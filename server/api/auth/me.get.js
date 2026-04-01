@@ -2,9 +2,8 @@ import pool from '~~/server/utils/db'
 import { verifyToken } from '~~/server/utils/auth'
 
 export default defineEventHandler(async (event) => {
-
-  // get token safely
-  const authHeader = event.req.headers.authorization
+  
+  const authHeader = getHeader(event, 'authorization')  // ✅ nuxt way to get headers
   const token = authHeader ? authHeader.split(' ')[1] : null
 
   console.log('TOKEN RECEIVED:', token) // DEBUG
@@ -19,7 +18,7 @@ export default defineEventHandler(async (event) => {
 
   // get user
   const result = await pool.query(
-    'SELECT id, first_name, last_name, email, age FROM users WHERE id=$1',
+    'SELECT id, first_name, last_name, email, age,role FROM users WHERE id=$1',
     [payload.id]
   )
 

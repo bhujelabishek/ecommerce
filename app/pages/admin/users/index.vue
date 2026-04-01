@@ -3,9 +3,9 @@ import Swal from 'sweetalert2'
 import { ref, reactive, onMounted } from 'vue'
 
 definePageMeta({
-    layout: 'admins'
+  layout: 'admins',
+  middleware: 'auth'  // ✅ add this
 })
-
 const users = ref([])
 
 // Fetch all users

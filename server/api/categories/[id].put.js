@@ -9,14 +9,17 @@ export default defineEventHandler(async (event) => {
   const payload = verifyToken(token)
   if (payload.role !== 'admin') throw createError({ statusCode: 403, message: 'Forbidden' })
 
-  const { name, parent_id, image } = await readBody(event)
-  if (!name) throw createError({ statusCode: 400, message: 'Name required' })
+  const id = getRouterParam(event, 'id')
+  const { name, parent_id, image, is_active } = await readBody(event)
 
   const result = await pool.query(
-    `INSERT INTO categories (name, parent_id, image, is_active)
-     VALUES ($1, $2, $3, true) RETURNING *`,
-    [name, parent_id || null, image || null]
+    `UPDATE categories
+     SET name = $1, parent_id = $2, image = $3, is_active = $4
+     WHERE id = $5 RETURNING *`,
+    [name, parent_id || null, image || null, is_active ?? true, id]
   )
+
+  if (result.rows.length === 0) throw createError({ statusCode: 404, message: 'Not found' })
 
   return result.rows[0]
 })

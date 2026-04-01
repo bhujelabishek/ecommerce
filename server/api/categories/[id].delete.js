@@ -9,14 +9,11 @@ export default defineEventHandler(async (event) => {
   const payload = verifyToken(token)
   if (payload.role !== 'admin') throw createError({ statusCode: 403, message: 'Forbidden' })
 
-  const { name, parent_id, image } = await readBody(event)
-  if (!name) throw createError({ statusCode: 400, message: 'Name required' })
+  const id = getRouterParam(event, 'id')
 
-  const result = await pool.query(
-    `INSERT INTO categories (name, parent_id, image, is_active)
-     VALUES ($1, $2, $3, true) RETURNING *`,
-    [name, parent_id || null, image || null]
-  )
+  // delete subcategories first, then parent
+  await pool.query(`DELETE FROM categories WHERE parent_id = $1`, [id])
+  await pool.query(`DELETE FROM categories WHERE id = $1`, [id])
 
-  return result.rows[0]
+  return { success: true }
 })
