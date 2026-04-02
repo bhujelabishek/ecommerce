@@ -3,7 +3,7 @@
 // const { logout } = useAuth()
 definePageMeta({
   layout: 'admins',
-  middleware: 'auth'  // ✅ add this
+  middleware: 'auth' 
 })
 
 const users = ref([])

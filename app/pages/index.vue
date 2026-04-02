@@ -23,18 +23,18 @@ onMounted(() => {
 const {data: categories} = await useFetch('/api/categories')
 
 
-/* =========================
-   FETCH PRODUCTS (SSR SAFE)
-========================= */
+
+  //  FETCH PRODUCTS (SSR SAFE)
+
 const { data: products } = await useFetch('/api/products')
 
 const featured = computed(() => {
   return products.value ? products.value.slice(0, 6) : []
 })
 
-/* =========================
-   SEO
-========================= */
+
+  // SEO
+
 useHead({
   title: 'Home - HookahStore',
   meta: [
@@ -46,9 +46,7 @@ useHead({
   ]
 })
 
-/* =========================
-   SLIDER
-========================= */
+// SLIDER LOGIC
 const slides = [
   {
     image: hero,
@@ -98,9 +96,7 @@ onUnmounted(() => {
 
   <div class="fade-up space-y-16">
 
-    <!-- =========================
-         HERO SLIDER
-    ========================= -->
+   <!-- HERO SLIDER -->
     <div class="relative w-full h-[600px] overflow-hidden">
 
       <div
@@ -154,12 +150,8 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- =========================
-         CONTENT
-    ========================= -->
+<!-- FEATURED PRODUCTS -->
     <LayoutContainer>
-
-      <!-- FEATURED PRODUCTS -->
       <section class="fade-up">
         <h2 class="text-2xl font-bold mb-6">Featured Products</h2>
 

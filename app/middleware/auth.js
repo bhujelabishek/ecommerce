@@ -1,4 +1,3 @@
-// middleware/auth.js
 export default defineNuxtRouteMiddleware((to) => {
   const { token, user } = useAuth()
 

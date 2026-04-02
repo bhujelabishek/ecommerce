@@ -1,4 +1,3 @@
-// composables/useAuth.js
 export const useAuth = () => {
 
   const token = useCookie('auth_token', {
@@ -9,7 +8,7 @@ export const useAuth = () => {
 
   const user = useState('auth_user', () => null)
 
-  // 👤 GET USER
+  // GET USER
   const getUser = async () => {
     if (!token.value) return null
 
@@ -25,14 +24,14 @@ export const useAuth = () => {
     }
   }
 
-  // ✅ INIT USER - always re-fetch on navigation (no early return if user exists)
+  // INIT USER - always re-fetch on navigation
   const initUser = async () => {
     if (!token.value) {
       user.value = null
       return
     }
 
-    // ❌ removed: if (user.value) return  ← this was causing stale state
+    // removed: if (user.value) return 
 
     try {
       user.value = await getUser()
@@ -42,7 +41,7 @@ export const useAuth = () => {
     }
   }
 
-  // 🔐 REGISTER
+  // REGISTER
   const register = async (firstName, lastName, email, password, age) => {
     return await $fetch('/api/auth/register', {
       method: 'POST',
@@ -50,7 +49,7 @@ export const useAuth = () => {
     })
   }
 
-  // 🔑 LOGIN
+  // LOGIN
   const login = async (email, password) => {
     const res = await $fetch('/api/auth/login', {
       method: 'POST',
@@ -68,10 +67,10 @@ export const useAuth = () => {
     return { res, user: user.value }
   }
 
-  // ✅ REACTIVE
+  // REACTIVE
   const isLoggedIn = computed(() => !!token.value)
 
-  // 🚪 LOGOUT
+  // LOGOUT
   const logout = () => {
     token.value = null
     user.value = null

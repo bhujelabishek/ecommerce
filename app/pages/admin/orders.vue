@@ -12,9 +12,7 @@ const { data: orders, refresh } = await useFetch('/api/admin/orders', {
   headers: { Authorization: `Bearer ${token.value}` }
 })
 
-// ===========================
 // STATUS HELPERS
-// ===========================
 const statusColor = (status) => ({
   pending:    'bg-yellow-100 text-yellow-700',
   processing: 'bg-blue-100 text-blue-700',
@@ -31,9 +29,8 @@ const paymentColor = (status) => ({
 
 const statusOptions = ['pending', 'processing', 'shipped', 'delivered', 'cancelled']
 
-// ===========================
+
 // SELECTED ORDER FOR DETAIL
-// ===========================
 const selectedOrder = ref(null)
 const orderItems = ref([])
 const loadingItems = ref(false)
@@ -60,9 +57,7 @@ const closeOrder = () => {
   orderItems.value = []
 }
 
-// ===========================
 // UPDATE STATUS
-// ===========================
 const updateStatus = async (order, newStatus) => {
   const result = await Swal.fire({
     title: `Change status to "${newStatus}"?`,
@@ -109,9 +104,7 @@ const updateStatus = async (order, newStatus) => {
   }
 }
 
-// ===========================
 // FILTERS
-// ===========================
 const filterStatus = ref('')
 const searchQuery = ref('')
 
@@ -127,9 +120,8 @@ const filteredOrders = computed(() => {
   })
 })
 
-// ===========================
+
 // STATS
-// ===========================
 const stats = computed(() => {
   if (!orders.value) return {}
   return {
@@ -388,7 +380,6 @@ const stats = computed(() => {
             <p class="text-xs font-bold uppercase text-yellow-600 mb-1">Customer Note</p>
             <p class="text-sm text-gray-700">{{ selectedOrder.notes }}</p>
           </div>
-
         </div>
       </div>
     </div>

@@ -19,7 +19,8 @@ export default defineEventHandler(async (event) => {
   if (!valid) throw createError({ statusCode: 401, message: 'Invalid password' })
 
   const token = generateToken(user)
-    console.log('USER ID:', user) // 👈 DEBUG
+  // DEBUGGING KO LAGI KAMM LAGCHA 
+    console.log('USER ID:', user) 
 
   return { token }
 })

@@ -1,6 +1,6 @@
 <script setup>
 const route = useRoute()
-const { logout } = useAuth()  // ✅ add this
+const { logout } = useAuth()  
 </script>
 
 <template>

@@ -22,7 +22,8 @@ export default defineEventHandler(async (event) => {
     return result.rows[0]
 
   } catch (err) {
-    console.log('UPDATE ERROR:', err.message)  // ← exact error
+    // exact error log
+    console.log('UPDATE ERROR:', err.message)  
     throw createError({ statusCode: 500, message: err.message })
   }
 })

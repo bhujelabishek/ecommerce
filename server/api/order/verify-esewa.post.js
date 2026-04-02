@@ -10,7 +10,8 @@ export default defineEventHandler(async (event) => {
       method: 'POST',
       body: new URLSearchParams({
         amt,
-        scd: process.env.ESEWA_SCD || 'EPAYTEST', // your merchant code
+        scd: process.env.ESEWA_SCD || 'EPAYTEST', 
+        // my organization merchant code
         rid: refId,
         pid: oid
       }).toString(),
@@ -19,7 +20,7 @@ export default defineEventHandler(async (event) => {
   )
 
   if (verifyRes.includes('Success')) {
-    // update order payment status
+    // update order payment status below code
     await pool.query(
       `UPDATE orders SET payment_status = 'paid', esewa_ref_id = $1, status = 'processing'
        WHERE id = $2`,

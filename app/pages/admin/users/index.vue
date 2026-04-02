@@ -4,7 +4,7 @@ import { ref, reactive, onMounted } from 'vue'
 
 definePageMeta({
   layout: 'admins',
-  middleware: 'auth'  // ✅ add this
+  middleware: 'auth'  
 })
 const users = ref([])
 

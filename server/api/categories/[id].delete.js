@@ -4,26 +4,28 @@ export default defineEventHandler(async (event) => {
   if (!token) throw createError({ statusCode: 401, message: 'Unauthorized' })
 
   const payload = verifyToken(token)
-  console.log('ROLE:', payload.role)  // ← add here
+  // Short debug log to check role
+  console.log('ROLE:', payload.role)  
 
   if (payload.role !== 'admin') throw createError({ statusCode: 403, message: 'Forbidden' })
 
   const id = getRouterParam(event, 'id')
 
   try {
-    // ✅ first remove foreign key references from products
+    // first remove foreign key references from products
     await pool.query(`UPDATE products SET category_id = NULL WHERE category_id = $1`, [id])
     
-    // ✅ then delete subcategories
+    // then delete subcategories
     await pool.query(`DELETE FROM categories WHERE parent_id = $1`, [id])
     
-    // ✅ then delete the category itself
+    // then delete the category itself
     await pool.query(`DELETE FROM categories WHERE id = $1`, [id])
 
     return { success: true }
 
   } catch (err) {
-    console.log('DELETE ERROR:', err.message)  // ← this will show exact error
+    // exact error log
+    console.log('DELETE ERROR:', err.message)  
     throw createError({ statusCode: 500, message: err.message })
   }
 })

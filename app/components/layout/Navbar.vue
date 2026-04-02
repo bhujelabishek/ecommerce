@@ -12,10 +12,10 @@ const { data: categories } = await useFetch('/api/categories', {
 const activeCategory = ref(null)
 const featuredProducts = ref([])
 const featuredLoading = ref(false)
-let closeTimer = null  // ✅ delay timer
+let closeTimer = null  // delay timer
 
 const openDropdown = async (category, event) => {
-  // ✅ cancel any pending close
+  // cancel any pending close
   if (closeTimer) {
     clearTimeout(closeTimer)
     closeTimer = null
@@ -43,7 +43,7 @@ const openDropdown = async (category, event) => {
   }
 }
 
-// ✅ don't close immediately — wait 150ms
+// don't close immediately — wait 150ms
 const startClose = () => {
   closeTimer = setTimeout(() => {
     activeCategory.value = null
@@ -51,7 +51,7 @@ const startClose = () => {
   }, 150)
 }
 
-// ✅ cancel close when mouse enters dropdown
+// cancel or close when mouse enters dropdown
 const cancelClose = () => {
   if (closeTimer) {
     clearTimeout(closeTimer)
@@ -154,7 +154,7 @@ onUnmounted(() => {
 
     </header>
 
-    <!-- DROPDOWN TELEPORTED TO BODY -->
+    <!-- DROPDOWN TELEPORTED TO BODY  -->
     <Teleport to="body">
       <div
         v-if="activeCategory"

@@ -2,21 +2,21 @@ import jwt from 'jsonwebtoken'
 
 const SECRET = 'MY_SECRET_KEY'
 
-// 🔐 Generate token
+// Generate JWT token
 export const generateToken = (user) => {
     console.log('GENERATING TOKEN FOR:', user.id)
  return jwt.sign(
     {
       id: user.id,
       email: user.email,
-      role: user.role  // ✅ make sure role is included here
+      role: user.role  
     },
     SECRET,
     { expiresIn: '7d' }
   )
 }
 
-// 🔍 Verify token
+// Verify JWT token
 export const verifyToken = (token) => {
   try {
     return jwt.verify(token, SECRET)

@@ -2,10 +2,10 @@
 import Swal from 'sweetalert2'
 definePageMeta({
   layout: 'admins',
-  middleware: 'auth'  // ✅ add this
+  middleware: 'auth'  
 })
 
-const { token } = useAuth()  // ✅ use cookie token not localStorage
+const { token } = useAuth() 
 
 const products = ref([])
 const showModal = ref(false)
@@ -60,9 +60,7 @@ const openCreate = () => {
   showModal.value = true
 }
 
-// ===========================
 // CREATE PRODUCT
-// ===========================
 const createProduct = async () => {
   if (!form.name || !form.price || !form.stock || !form.category_id) {
     Swal.fire({
@@ -124,9 +122,7 @@ const createProduct = async () => {
   loading.value = false
 }
 
-// ===========================
 // EDIT PRODUCT
-// ===========================
 const editProduct = async (id) => {
   try {
     const product = await $fetch(`/api/admin/products/${id}`, {
@@ -147,9 +143,7 @@ const editProduct = async (id) => {
   }
 }
 
-// ===========================
 // UPDATE PRODUCT
-// ===========================
 const updateProduct = async () => {
   loading.value = true
 
@@ -201,9 +195,7 @@ const updateProduct = async () => {
   loading.value = false
 }
 
-// ===========================
 // DELETE PRODUCT
-// ===========================
 const deleteProduct = async (id, name) => {
   const result = await Swal.fire({
     title: `Delete "${name}"?`,
@@ -246,9 +238,7 @@ const deleteProduct = async (id, name) => {
   }
 }
 
-// ===========================
 // TOGGLE STATUS
-// ===========================
 const toggleStatus = async (product) => {
   const newStatus = !product.is_active
   const label = newStatus ? 'activate' : 'deactivate'

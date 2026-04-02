@@ -21,8 +21,8 @@ const form = reactive({
 })
 
 // eSewa config
-const ESEWA_URL = 'https://uat.esewa.com.np/epay/main' // change to prod URL when ready
-const ESEWA_SCD = 'EPAYTEST' // your merchant code from eSewa
+const ESEWA_URL = 'https://uat.esewa.com.np/epay/main' 
+const ESEWA_SCD = 'EPAYTEST' 
 
 const placeOrder = async () => {
   if (!form.full_name || !form.phone || !form.address || !form.city) {
@@ -38,7 +38,7 @@ const placeOrder = async () => {
   loading.value = true
 
   try {
-    // 1. create order in DB first
+    // created order in DB 
     const order = await $fetch('/api/orders', {
       method: 'POST',
       headers: { Authorization: `Bearer ${token.value}` },
@@ -50,7 +50,7 @@ const placeOrder = async () => {
       }
     })
 
-    // 2. redirect to eSewa
+    // redirected to eSewa
     const esewaForm = document.createElement('form')
     esewaForm.method = 'POST'
     esewaForm.action = ESEWA_URL

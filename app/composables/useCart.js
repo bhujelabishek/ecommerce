@@ -7,7 +7,7 @@ export const useCart = () => {
     default: () => []
   })
 
-  // sync cookie → state on first load
+  // sync cookie -> state on first load
   if (cart.value.length === 0 && cartCookie.value?.length > 0) {
     cart.value = cartCookie.value
   }

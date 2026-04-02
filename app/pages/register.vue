@@ -26,7 +26,7 @@ const errors = reactive({
 
 const { register } = useAuth()
 
-// validation function
+// validation functionalitiies
 const validate = () => {
     let valid = true
 
@@ -108,28 +108,24 @@ const handleRegister = async () => {
 
         <h1 class="text-2xl font-bold">Register</h1>
 
-        <!-- FIRST NAME -->
         <div>
             <label>First Name <span class="text-red-500">*</span></label>
             <input v-model="firstName" class="input" />
             <p class="error">{{ errors.firstName }}</p>
         </div>
 
-        <!-- LAST NAME -->
         <div>
             <label>Last Name <span class="text-red-500">*</span></label>
             <input v-model="lastName" class="input" />
             <p class="error">{{ errors.lastName }}</p>
         </div>
 
-        <!-- EMAIL -->
         <div>
             <label>Email <span class="text-red-500">*</span></label>
             <input v-model="email" class="input" />
             <p class="error">{{ errors.email }}</p>
         </div>
 
-        <!-- PASSWORD -->
         <div>
             <label>Password <span class="text-red-500">*</span></label>
             <input v-model="password" type="password" class="input" />
@@ -139,21 +135,18 @@ const handleRegister = async () => {
             <p class="error">{{ errors.password }}</p>
         </div>
 
-        <!-- CONFIRM PASSWORD -->
         <div>
             <label>Confirm Password <span class="text-red-500">*</span></label>
             <input v-model="confirmPassword" type="password" class="input" />
             <p class="error">{{ errors.confirmPassword }}</p>
         </div>
 
-        <!-- AGE -->
         <div>
             <label>Age <span class="text-red-500">*</span></label>
             <input v-model="age" type="number" class="input" />
             <p class="error">{{ errors.age }}</p>
         </div>
 
-        <!-- BUTTON -->
         <button @click="handleRegister" class="bg-black text-white w-full py-3 rounded hover:bg-gray-800">
             Register
         </button>
