@@ -1,5 +1,6 @@
 <script setup>
 const route = useRoute()
+const { logout } = useAuth()  // ✅ add this
 </script>
 
 <template>
@@ -15,39 +16,34 @@ const route = useRoute()
 
       <!-- NAV -->
       <nav class="flex-1 px-3 py-6 space-y-2">
-
-        <NuxtLink
-          to="/admin/dashboard"
-          class="nav-link"
-          :class="{ active: route.path === '/admin/dashboard' }"
-        >
+        <NuxtLink to="/admin/dashboard" class="nav-link"
+          :class="{ active: route.path === '/admin/dashboard' }">
           Dashboard
         </NuxtLink>
-
-         <NuxtLink to="/admin/users" class="nav-link">
+        <NuxtLink to="/admin/users" class="nav-link"
+          :class="{ active: route.path === '/admin/users' }">
           Users
         </NuxtLink>
-
-
-        <NuxtLink to="/admin/products" class="nav-link">
+        <NuxtLink to="/admin/products" class="nav-link"
+          :class="{ active: route.path === '/admin/products' }">
           Products
         </NuxtLink>
-
-         <NuxtLink to="/admin/categories" class="nav-link">
+        <NuxtLink to="/admin/categories" class="nav-link"
+          :class="{ active: route.path === '/admin/categories' }">
           Categories
         </NuxtLink>
-
-        <NuxtLink to="/admin/orders" class="nav-link">
+        <NuxtLink to="/admin/orders" class="nav-link"
+          :class="{ active: route.path === '/admin/orders' }">
           Orders
         </NuxtLink>
-
-       
-
       </nav>
 
       <!-- LOGOUT -->
       <div class="p-4 border-t border-gray-800">
-        <button class="w-full text-left text-red-400 hover:text-red-500">
+        <button
+          @click="logout"
+          class="w-full text-left text-red-400 hover:text-red-300 transition"
+        >
           Logout
         </button>
       </div>
@@ -55,20 +51,13 @@ const route = useRoute()
 
     <!-- MAIN -->
     <div class="flex-1 ml-64 flex flex-col">
-
-      <!-- HEADER -->
       <header class="bg-white border-b px-8 py-4 flex justify-between">
-        <h1 class="text-xl font-semibold capitalize">
-          {{ route.name }}
-        </h1>
+        <h1 class="text-xl font-semibold capitalize">{{ route.name }}</h1>
         <p class="text-sm text-gray-500">Welcome back, Admin</p>
       </header>
-
-      <!-- PAGE CONTENT -->
       <main class="p-8 overflow-y-auto">
         <slot />
       </main>
-
     </div>
 
   </div>
@@ -78,7 +67,6 @@ const route = useRoute()
 .nav-link {
   @apply block px-4 py-2 rounded-lg hover:bg-gray-800 hover:text-white transition;
 }
-
 .active {
   @apply bg-gray-800 text-white;
 }

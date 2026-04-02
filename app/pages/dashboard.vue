@@ -1,4 +1,5 @@
 <script setup>
+import {User} from 'lucide-vue-next'
 
 const { logout, user, initUser } = useAuth()
 

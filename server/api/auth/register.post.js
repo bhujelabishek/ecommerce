@@ -20,16 +20,10 @@ export default defineEventHandler(async (event) => {
   const hashed = await hashPassword(body.password)
 
   await pool.query(
-    `INSERT INTO users (first_name, last_name, email, password, age)
-     VALUES ($1, $2, $3, $4, $5)`,
-    [
-      body.firstName,
-      body.lastName,
-      body.email,
-      hashed,
-      body.age
-    ]
-  )
+  `INSERT INTO users (first_name, last_name, email, password, age, role)
+   VALUES ($1, $2, $3, $4, $5, 'user') RETURNING *`,  // ✅ hardcode 'user' as default
+  [firstName, lastName, hashedPassword, age]
+)
 
   return { message: 'User created' }
 })
