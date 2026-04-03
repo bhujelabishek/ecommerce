@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const token = authHeader ? authHeader.split(' ')[1] : null
 
   // DEBUGGING KO LAGI KAMM LAGCHA
-  console.log('TOKEN RECEIVED:', token) 
+  // console.log('TOKEN RECEIVED:', token) 
 
   if (!token) {
     throw createError({ statusCode: 401, message: 'Not authenticated' })
@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
 
   // verify token and get payload
   const payload = verifyToken(token)
-  console.log('PAYLOAD:', payload)
+  // console.log('PAYLOAD:', payload)
 
   // GET USER INFO FROM DB
   const result = await pool.query(

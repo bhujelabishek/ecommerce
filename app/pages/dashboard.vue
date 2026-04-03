@@ -9,11 +9,9 @@ useHead({
 })
 
 onMounted(async () => {
-  // ✅ if user not loaded yet, try to load
   if (!user.value) {
     await initUser()
   }
-  // ✅ if still no user, redirect to login
   if (!user.value) {
     navigateTo('/login')
   }

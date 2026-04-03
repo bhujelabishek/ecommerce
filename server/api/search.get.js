@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
 
   const result = await pool.query(`
     SELECT
-      p.id, p.name, p.price, p.image,
+      p.id, p.name, p.price, p.image, p.rating, p.stock,
       c.name AS category
     FROM products p
     LEFT JOIN categories c ON p.category_id = c.id
@@ -15,10 +15,11 @@ export default defineEventHandler(async (event) => {
       AND (
         p.name ILIKE $1 OR
         p.description ILIKE $1 OR
+        p.brand ILIKE $1 OR
         c.name ILIKE $1
       )
-    ORDER BY p.name
-    LIMIT 8
+    ORDER BY p.rating DESC
+    LIMIT 20
   `, [`%${q.trim()}%`])
 
   return result.rows

@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
 
   const token = generateToken(user)
   // DEBUGGING KO LAGI KAMM LAGCHA 
-    console.log('USER ID:', user) 
+    // console.log('USER ID:', user) 
 
   return { token }
 })

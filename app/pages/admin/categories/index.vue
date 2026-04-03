@@ -12,13 +12,13 @@ const { data: categories, refresh } = await useFetch('/api/categories')
 const showModal = ref(false)
 const editingId = ref(null)
 const loading = ref(false)
-const imageFile = ref(null)         // ✅ actual file object
-const imagePreview = ref('')        // ✅ preview URL shown in UI
+const imageFile = ref(null)
+const imagePreview = ref('')
 
 const form = reactive({
   name: '',
   parent_id: '',
-  image: '',                        // ✅ stores final path after upload
+  image: '',
   is_active: true
 })
 
@@ -44,21 +44,21 @@ const openEdit = (cat) => {
   form.is_active = cat.is_active
   editingId.value = cat.id
   imageFile.value = null
-  // ✅ show existing image as preview
+  // show existing image as preview
   imagePreview.value = cat.image || ''
   showModal.value = true
 }
 
-// ✅ when user picks a file
+// when user picks a file
 const handleImageFile = (e) => {
   const file = e.target.files[0]
   if (!file) return
   imageFile.value = file
-  // ✅ create local preview URL instantly
+  // create local preview URL instantly
   imagePreview.value = URL.createObjectURL(file)
 }
 
-// ✅ upload image and return path
+// upload image and return path
 const uploadImage = async () => {
   if (!imageFile.value) return form.image  // no new file, keep existing
 
@@ -85,9 +85,7 @@ const allCategories = computed(() => {
   return flat
 })
 
-// ===========================
 // SAVE
-// ===========================
 const save = async () => {
   if (!form.name) {
     Swal.fire({ icon: 'warning', title: 'Name required', text: 'Please enter a category name.', confirmButtonColor: '#000' })
@@ -97,7 +95,7 @@ const save = async () => {
   loading.value = true
 
   try {
-    // ✅ upload image first if new file selected
+    // upload image first if new file selected
     const imagePath = await uploadImage()
 
     const body = {
@@ -141,9 +139,7 @@ const save = async () => {
   loading.value = false
 }
 
-// ===========================
 // DELETE
-// ===========================
 const deleteCategory = async (id, name) => {
   const result = await Swal.fire({
     title: `Delete "${name}"?`,
@@ -170,9 +166,7 @@ const deleteCategory = async (id, name) => {
   }
 }
 
-// ===========================
 // TOGGLE STATUS
-// ===========================
 const toggleStatus = async (cat) => {
   const newStatus = !cat.is_active
   const label = newStatus ? 'activate' : 'deactivate'
@@ -235,13 +229,9 @@ const toggleStatus = async (cat) => {
             <tr class="border-t hover:bg-gray-50 transition">
               <td class="p-4 text-gray-400">{{ cat.id }}</td>
               <td class="p-4">
-                <!-- ✅ show image if exists -->
-                <img
-                  v-if="cat.image"
-                  :src="cat.image"
-                  :alt="cat.name"
-                  class="w-12 h-12 object-cover rounded-lg border"
-                />
+                <!-- show image if exists -->
+                <img v-if="cat.image" :src="cat.image" :alt="cat.name"
+                  class="w-12 h-12 object-cover rounded-lg border" />
                 <div v-else
                   class="w-12 h-12 rounded-lg border bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
                   No img
@@ -255,11 +245,9 @@ const toggleStatus = async (cat) => {
                 {{ cat.subcategories?.length || 0 }} subcategories
               </td>
               <td class="p-4">
-                <button
-                  @click="toggleStatus(cat)"
+                <button @click="toggleStatus(cat)"
                   :class="cat.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'"
-                  class="px-3 py-1 rounded-full text-xs font-medium"
-                >
+                  class="px-3 py-1 rounded-full text-xs font-medium">
                   {{ cat.is_active ? 'Active' : 'Inactive' }}
                 </button>
               </td>
@@ -276,19 +264,11 @@ const toggleStatus = async (cat) => {
             </tr>
 
             <!-- SUBCATEGORY ROWS -->
-            <tr
-              v-for="sub in cat.subcategories"
-              :key="sub.id"
-              class="border-t bg-gray-50 hover:bg-gray-100 transition"
-            >
+            <tr v-for="sub in cat.subcategories" :key="sub.id" class="border-t bg-gray-50 hover:bg-gray-100 transition">
               <td class="p-4 pl-8 text-gray-400">{{ sub.id }}</td>
               <td class="p-4 pl-8">
-                <img
-                  v-if="sub.image"
-                  :src="sub.image"
-                  :alt="sub.name"
-                  class="w-10 h-10 object-cover rounded-lg border"
-                />
+                <img v-if="sub.image" :src="sub.image" :alt="sub.name"
+                  class="w-10 h-10 object-cover rounded-lg border" />
                 <div v-else
                   class="w-10 h-10 rounded-lg border bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
                   No img
@@ -338,27 +318,19 @@ const toggleStatus = async (cat) => {
         <div>
           <label class="text-sm font-medium">Category Image</label>
 
-          <!-- ✅ preview box -->
+          <!-- preview box -->
           <div class="mt-2 mb-2">
-            <img
-              v-if="imagePreview"
-              :src="imagePreview"
-              class="w-full h-36 object-cover rounded-lg border"
-              alt="preview"
-            />
+            <img v-if="imagePreview" :src="imagePreview" class="w-full h-36 object-cover rounded-lg border"
+              alt="preview" />
             <div v-else
               class="w-full h-36 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 text-sm">
               No image selected
             </div>
           </div>
 
-          <!-- ✅ file picker -->
-          <input
-            type="file"
-            accept="image/*"
-            @change="handleImageFile"
-            class="border w-full p-2 rounded-lg text-sm focus:outline-none"
-          />
+          <!-- file picker -->
+          <input type="file" accept="image/*" @change="handleImageFile"
+            class="border w-full p-2 rounded-lg text-sm focus:outline-none" />
           <p class="text-xs text-gray-400 mt-1">JPG, PNG, WEBP supported</p>
         </div>
 
@@ -368,11 +340,7 @@ const toggleStatus = async (cat) => {
           <select v-model="form.parent_id"
             class="border w-full p-2 rounded-lg mt-1 focus:outline-none focus:ring-1 focus:ring-black">
             <option value="">None (Main Category)</option>
-            <option
-              v-for="c in allCategories.filter(c => !c.parent_id)"
-              :key="c.id"
-              :value="c.id"
-            >
+            <option v-for="c in allCategories.filter(c => !c.parent_id)" :key="c.id" :value="c.id">
               {{ c.name }}
             </option>
           </select>
@@ -384,20 +352,16 @@ const toggleStatus = async (cat) => {
         <!-- STATUS -->
         <div class="flex items-center gap-3">
           <label class="text-sm font-medium">Status</label>
-          <button
-            type="button"
-            @click="form.is_active = !form.is_active"
+          <button type="button" @click="form.is_active = !form.is_active"
             :class="form.is_active ? 'bg-green-500' : 'bg-gray-400'"
-            class="px-4 py-1 rounded-full text-white text-sm transition"
-          >
+            class="px-4 py-1 rounded-full text-white text-sm transition">
             {{ form.is_active ? 'Active' : 'Inactive' }}
           </button>
         </div>
 
         <!-- BUTTONS -->
         <div class="flex justify-end gap-3 pt-2">
-          <button @click="showModal = false; resetForm()"
-            class="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50">
+          <button @click="showModal = false; resetForm()" class="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50">
             Cancel
           </button>
           <button @click="save" :disabled="loading"

@@ -2,8 +2,8 @@
 <script setup>
 // const { logout } = useAuth()
 definePageMeta({
-  layout: 'admins',
-  middleware: 'auth' 
+  layout: 'admins',   
+  middleware: 'auth'
 })
 
 const users = ref([])

@@ -20,6 +20,12 @@ const { logout } = useAuth()
           :class="{ active: route.path === '/admin/dashboard' }">
           Dashboard
         </NuxtLink>
+
+        <NuxtLink to="/admin/banners" class="nav-link"
+          :class="{ active: route.path === '/admin/banners' }">
+          Banners
+        </NuxtLink>
+
         <NuxtLink to="/admin/users" class="nav-link"
           :class="{ active: route.path === '/admin/users' }">
           Users
