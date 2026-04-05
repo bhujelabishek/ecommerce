@@ -1,167 +1,91 @@
 <script setup>
-useHead({
-    title: 'Register',
-    meta: [
-        {
-            name: 'Register Description', content: "Register"
-        }
-    ]
-})
-const firstName = ref('')
-const lastName = ref('')
-const email = ref('')
-const password = ref('')
-const confirmPassword = ref('')
-const age = ref('')
-
-// error messages
-const errors = reactive({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    age: ''
-})
-
 const { register } = useAuth()
 
-// validation functionalitiies
-const validate = () => {
-    let valid = true
-
-    // reset errors
-    Object.keys(errors).forEach(key => errors[key] = '')
-
-    if (!firstName.value) {
-        errors.firstName = 'First name is required'
-        valid = false
-    }
-
-    if (!lastName.value) {
-        errors.lastName = 'Last name is required'
-        valid = false
-    }
-
-    if (!email.value) {
-        errors.email = 'Email is required'
-        valid = false
-    } else if (!/^\S+@\S+\.\S+$/.test(email.value)) {
-        errors.email = 'Invalid email format'
-        valid = false
-    }
-
-    if (!password.value) {
-        errors.password = 'Password is required'
-        valid = false
-    } else if (
-        !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/.test(password.value)
-    ) {
-        errors.password =
-            'Password must be 8+ chars, include uppercase, lowercase, and special character'
-        valid = false
-    }
-
-    if (password.value !== confirmPassword.value) {
-        errors.confirmPassword = 'Passwords do not match'
-        valid = false
-    }
-
-    if (!age.value) {
-        errors.age = 'Age is required'
-        valid = false
-    } else if (age.value < 18) {
-        errors.age = 'You must be 18+'
-        valid = false
-    }
-
-    return valid
-}
+const form = reactive({ firstName: '', lastName: '', email: '', password: '', age: '' })
+const errors = reactive({ general: '' })
+const loading = ref(false)
 
 const handleRegister = async () => {
-    console.log("button clicked")
-  if (!validate()) return
-
+  loading.value = true
+  errors.general = ''
   try {
-    const res = await register(
-      firstName.value,
-      lastName.value,
-      email.value,
-      password.value,
-      age.value
-    )
-
-    console.log('SUCCESS:', res)
-
-    navigateTo('/login')
+    await register(form.firstName, form.lastName, form.email, form.password, form.age)
+    await navigateTo('/login')
   } catch (err) {
-    console.error('REGISTER ERROR:', err)
-    alert(err.data?.message || 'Register failed')
+    errors.general = err.data?.message || 'Registration failed'
   }
+  loading.value = false
 }
+
+useHead({ title: 'Register - SmokeHaven' })
 </script>
 
 <template>
-    <LayoutNavbar />
+  <LayoutNavbar />
 
-    <div class="max-w-md mx-auto py-20 space-y-5">
+  <div class="bg-gray-950 min-h-screen flex items-center justify-center px-6 py-20">
+    <div class="w-full max-w-md">
 
-        <h1 class="text-2xl font-bold">Register</h1>
+      <div class="text-center mb-8">
+        <div class="w-14 h-14 bg-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <span class="text-white font-black text-2xl">S</span>
+        </div>
+        <h1 class="text-2xl font-black text-white">Create Account</h1>
+        <p class="text-gray-500 mt-1 text-sm">Join SmokeHaven Nepal</p>
+      </div>
 
-        <div>
-            <label>First Name <span class="text-red-500">*</span></label>
-            <input v-model="firstName" class="input" />
-            <p class="error">{{ errors.firstName }}</p>
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 space-y-4">
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="text-sm font-medium text-gray-300 block mb-1.5">First Name</label>
+            <input v-model="form.firstName" placeholder="John"
+              class="w-full bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 transition" />
+          </div>
+          <div>
+            <label class="text-sm font-medium text-gray-300 block mb-1.5">Last Name</label>
+            <input v-model="form.lastName" placeholder="Doe"
+              class="w-full bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 transition" />
+          </div>
         </div>
 
         <div>
-            <label>Last Name <span class="text-red-500">*</span></label>
-            <input v-model="lastName" class="input" />
-            <p class="error">{{ errors.lastName }}</p>
+          <label class="text-sm font-medium text-gray-300 block mb-1.5">Email</label>
+          <input v-model="form.email" type="email" placeholder="you@example.com"
+            class="w-full bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 transition" />
         </div>
 
         <div>
-            <label>Email <span class="text-red-500">*</span></label>
-            <input v-model="email" class="input" />
-            <p class="error">{{ errors.email }}</p>
+          <label class="text-sm font-medium text-gray-300 block mb-1.5">Password</label>
+          <input v-model="form.password" type="password" placeholder="••••••••"
+            class="w-full bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 transition" />
         </div>
 
         <div>
-            <label>Password <span class="text-red-500">*</span></label>
-            <input v-model="password" type="password" class="input" />
-            <p class="text-xs text-gray-500">
-                Must be at least 8 characters, include uppercase, lowercase, and special character
-            </p>
-            <p class="error">{{ errors.password }}</p>
+          <label class="text-sm font-medium text-gray-300 block mb-1.5">Age</label>
+          <input v-model="form.age" type="number" placeholder="Must be 18+"
+            class="w-full bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 transition" />
         </div>
 
-        <div>
-            <label>Confirm Password <span class="text-red-500">*</span></label>
-            <input v-model="confirmPassword" type="password" class="input" />
-            <p class="error">{{ errors.confirmPassword }}</p>
-        </div>
+        <p v-if="errors.general" class="text-red-400 text-sm text-center bg-red-400/10 border border-red-400/20 rounded-xl p-3">
+          {{ errors.general }}
+        </p>
 
-        <div>
-            <label>Age <span class="text-red-500">*</span></label>
-            <input v-model="age" type="number" class="input" />
-            <p class="error">{{ errors.age }}</p>
-        </div>
-
-        <button @click="handleRegister" class="bg-black text-white w-full py-3 rounded hover:bg-gray-800">
-            Register
+        <button @click="handleRegister" :disabled="loading"
+          class="w-full bg-orange-500 hover:bg-orange-400 text-white font-bold py-3 rounded-xl transition text-sm uppercase tracking-widest disabled:opacity-50">
+          {{ loading ? 'Creating Account...' : 'Create Account' }}
         </button>
 
+        <p class="text-center text-sm text-gray-500">
+          Already have an account?
+          <NuxtLink to="/login" class="text-orange-400 hover:text-orange-300 font-semibold transition">
+            Sign in
+          </NuxtLink>
+        </p>
+      </div>
+
     </div>
+  </div>
 
-    <LayoutFooter />
+  <LayoutFooter />
 </template>
-
-<style scoped>
-.input {
-    @apply border w-full p-2 rounded mt-1;
-}
-
-.error {
-    @apply text-red-500 text-sm mt-1;
-}
-</style>

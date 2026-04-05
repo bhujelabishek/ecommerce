@@ -1,4 +1,3 @@
-<!-- components/Layout/Footer.vue -->
 <script setup>
 const { data: categories } = await useFetch('/api/categories', {
   server: false,
@@ -6,95 +5,188 @@ const { data: categories } = await useFetch('/api/categories', {
 })
 
 const mainCategories = computed(() =>
-  categories.value?.filter(c => !c.parent_id).slice(0, 6) ?? []
+  categories.value?.filter(c => !c.parent_id).slice(0, 5) ?? []
 )
 
-const currentYear = new Date().getFullYear()
+const year = new Date().getFullYear()
 </script>
 
 <template>
-  <footer class="bg-gray-900 text-gray-300 mt-16">
+  <footer class="bg-gray-950 text-gray-400 border-t border-gray-800">
 
-    <div class="max-w-7xl mx-auto px-6 py-12">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+    <!-- MAIN FOOTER -->
+    <div class="max-w-7xl mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
 
-        <!-- BRAND -->
-        <div class="space-y-4">
-          <h2 class="text-xl font-bold text-white">HookahStore</h2>
-          <p class="text-sm text-gray-400 leading-relaxed">
-            Nepal's premier destination for hookahs, shisha tobacco, charcoal, and accessories.
-          </p>
-          <div class="flex gap-3">
-            <a href="#" class="w-9 h-9 bg-gray-800 rounded-full flex items-center justify-center hover:bg-purple-700 transition text-sm">f</a>
-            <a href="#" class="w-9 h-9 bg-gray-800 rounded-full flex items-center justify-center hover:bg-purple-700 transition text-sm">in</a>
-            <a href="#" class="w-9 h-9 bg-gray-800 rounded-full flex items-center justify-center hover:bg-purple-700 transition text-sm">yt</a>
+      <!-- BRAND -->
+      <div class="lg:col-span-1 space-y-4">
+        <NuxtLink to="/" class="flex items-center gap-2">
+          <div class="w-9 h-9 bg-orange-500 rounded-lg flex items-center justify-center">
+            <span class="text-white font-black text-lg leading-none">S</span>
+          </div>
+          <div>
+            <span class="text-xl font-black text-white">Smoke</span><span class="text-xl font-black text-orange-400">Haven</span>
+          </div>
+        </NuxtLink>
+        <p class="text-sm leading-relaxed text-gray-500">
+          Nepal's premier hookah and shisha store. We bring you authentic products from the world's top brands, delivered to your doorstep.
+        </p>
+        <div class="space-y-2 text-sm">
+          <div class="flex items-center gap-2">
+            <span class="text-orange-400">📍</span>
+            <span>Kathmandu, Nepal</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-orange-400">📞</span>
+            <span>+977-9800000000</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-orange-400">✉️</span>
+            <span>hello@smokehaven.com.np</span>
           </div>
         </div>
+      </div>
 
-        <!-- DYNAMIC CATEGORIES -->
-        <div>
-          <h3 class="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Shop</h3>
-          <ul class="space-y-2">
-            <li v-for="cat in mainCategories" :key="cat.id">
-              <NuxtLink
-                :to="`/products?category=${cat.id}`"
-                class="text-sm text-gray-400 hover:text-white transition"
-              >
-                {{ cat.name }}
-              </NuxtLink>
-            </li>
-            <li>
-              <NuxtLink to="/products" class="text-sm text-gray-400 hover:text-white transition">
-                All Products
-              </NuxtLink>
-            </li>
-          </ul>
-        </div>
+      <!-- SHOP CATEGORIES -->
+      <div class="space-y-4">
+        <h3 class="text-white font-bold uppercase tracking-widest text-xs">Shop</h3>
+        <ul class="space-y-2">
+          <li>
+            <NuxtLink to="/products" class="text-sm hover:text-orange-400 transition flex items-center gap-1">
+              <span class="text-orange-500 text-xs">→</span> All Products
+            </NuxtLink>
+          </li>
+          <li v-for="cat in mainCategories" :key="cat.id">
+            <NuxtLink
+              :to="`/products?category=${cat.id}`"
+              class="text-sm hover:text-orange-400 transition flex items-center gap-1"
+            >
+              <span class="text-orange-500 text-xs">→</span> {{ cat.name }}
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/search" class="text-sm hover:text-orange-400 transition flex items-center gap-1">
+              <span class="text-orange-500 text-xs">→</span> Search Products
+            </NuxtLink>
+          </li>
+        </ul>
+      </div>
 
-        <!-- ACCOUNT -->
-        <div>
-          <h3 class="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Account</h3>
-          <ul class="space-y-2">
-            <li><NuxtLink to="/login" class="text-sm text-gray-400 hover:text-white transition">Login</NuxtLink></li>
-            <li><NuxtLink to="/register" class="text-sm text-gray-400 hover:text-white transition">Sign Up</NuxtLink></li>
-            <li><NuxtLink to="/dashboard" class="text-sm text-gray-400 hover:text-white transition">My Profile</NuxtLink></li>
-            <li><NuxtLink to="/dashboard/orders" class="text-sm text-gray-400 hover:text-white transition">My Orders</NuxtLink></li>
-            <li><NuxtLink to="/cart" class="text-sm text-gray-400 hover:text-white transition">Cart</NuxtLink></li>
-          </ul>
-        </div>
+      <!-- CUSTOMER SERVICE -->
+      <div class="space-y-4">
+        <h3 class="text-white font-bold uppercase tracking-widest text-xs">Customer Service</h3>
+        <ul class="space-y-2">
+          <li>
+            <NuxtLink to="/dashboard/orders" class="text-sm hover:text-orange-400 transition flex items-center gap-1">
+              <span class="text-orange-500 text-xs">→</span> Track My Order
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/dashboard" class="text-sm hover:text-orange-400 transition flex items-center gap-1">
+              <span class="text-orange-500 text-xs">→</span> My Account
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/cart" class="text-sm hover:text-orange-400 transition flex items-center gap-1">
+              <span class="text-orange-500 text-xs">→</span> Shopping Cart
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/register" class="text-sm hover:text-orange-400 transition flex items-center gap-1">
+              <span class="text-orange-500 text-xs">→</span> Create Account
+            </NuxtLink>
+          </li>
+          <li>
+            <a href="mailto:hello@smokehaven.com.np" class="text-sm hover:text-orange-400 transition flex items-center gap-1">
+              <span class="text-orange-500 text-xs">→</span> Contact Us
+            </a>
+          </li>
+        </ul>
+      </div>
 
-        <!-- CONTACT + NEWSLETTER -->
-        <div>
-          <h3 class="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Contact</h3>
-          <ul class="space-y-2 text-sm text-gray-400 mb-6">
-            <li>📍 Kathmandu, Nepal</li>
-            <li>📞 +977-98XXXXXXXX</li>
-            <li>✉️ support@hookahstore.com</li>
-          </ul>
+      <!-- POLICIES + PAYMENT -->
+      <div class="space-y-4">
+        <h3 class="text-white font-bold uppercase tracking-widest text-xs">Information</h3>
+        <ul class="space-y-2">
+          <li>
+            <NuxtLink to="/about" class="text-sm hover:text-orange-400 transition flex items-center gap-1">
+              <span class="text-orange-500 text-xs">→</span> About Us
+            </NuxtLink>
+          </li>
+          <li>
+            <a href="#" class="text-sm hover:text-orange-400 transition flex items-center gap-1">
+              <span class="text-orange-500 text-xs">→</span> Shipping Policy
+            </a>
+          </li>
+          <li>
+            <a href="#" class="text-sm hover:text-orange-400 transition flex items-center gap-1">
+              <span class="text-orange-500 text-xs">→</span> Return Policy
+            </a>
+          </li>
+          <li>
+            <a href="#" class="text-sm hover:text-orange-400 transition flex items-center gap-1">
+              <span class="text-orange-500 text-xs">→</span> Privacy Policy
+            </a>
+          </li>
+        </ul>
 
-          <h3 class="text-white font-semibold mb-2 text-sm uppercase tracking-wider">Newsletter</h3>
-          <div class="flex gap-2">
-            <input
-              type="email"
-              placeholder="Your email"
-              class="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
-            />
-            <button class="bg-purple-700 text-white px-3 py-2 rounded-lg text-sm hover:bg-purple-600 transition">
-              Join
-            </button>
+        <!-- PAYMENT METHODS -->
+        <div class="pt-2">
+          <p class="text-xs text-gray-600 uppercase tracking-widest mb-3">We Accept</p>
+          <div class="flex gap-2 flex-wrap">
+            <div class="bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-xs font-bold text-green-400">
+              eSewa
+            </div>
+            <div class="bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-xs font-bold text-blue-400">
+              Khalti
+            </div>
+            <div class="bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-xs font-bold text-gray-300">
+              Cash on Delivery
+            </div>
           </div>
         </div>
+      </div>
 
+    </div>
+
+    <!-- PROMO STRIP -->
+    <div class="border-t border-gray-800">
+      <div class="max-w-7xl mx-auto px-6 py-5 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center text-xs">
+        <div class="flex items-center justify-center gap-2 text-gray-400">
+          <span class="text-orange-400 text-base">🚚</span>
+          <div class="text-left">
+            <p class="font-bold text-white text-sm">Free Shipping</p>
+            <p>On orders over ₨5,000</p>
+          </div>
+        </div>
+        <div class="flex items-center justify-center gap-2 text-gray-400">
+          <span class="text-orange-400 text-base">🔒</span>
+          <div class="text-left">
+            <p class="font-bold text-white text-sm">Secure Payments</p>
+            <p>eSewa & Khalti protected</p>
+          </div>
+        </div>
+        <div class="flex items-center justify-center gap-2 text-gray-400">
+          <span class="text-orange-400 text-base">✅</span>
+          <div class="text-left">
+            <p class="font-bold text-white text-sm">100% Authentic</p>
+            <p>All products verified genuine</p>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- BOTTOM BAR -->
-    <div class="border-t border-gray-800">
-      <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-500">
-        <p>© {{ currentYear }} HookahStore. All rights reserved.</p>
+    <div class="border-t border-gray-800 bg-black">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-600">
+        <p>© {{ year }} SmokeHaven Nepal. All rights reserved.</p>
         <p class="text-center">
-          WARNING: This product contains nicotine. Nicotine is an addictive chemical. For adults only.
+          Must be 18+ to purchase. Contains nicotine — an addictive substance.
         </p>
+        <div class="flex gap-4">
+          <a href="#" class="hover:text-orange-400 transition">Terms</a>
+          <a href="#" class="hover:text-orange-400 transition">Privacy</a>
+          <a href="#" class="hover:text-orange-400 transition">Sitemap</a>
+        </div>
       </div>
     </div>
 

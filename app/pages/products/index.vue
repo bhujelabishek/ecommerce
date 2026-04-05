@@ -7,8 +7,14 @@ useHead({
 // ===========================
 // FETCH BASE DATA
 // ===========================
-const { data: allProducts } = await useFetch('/api/products')
-const { data: categories } = await useFetch('/api/categories')
+const { data: allProducts } = await useFetch('/api/products', {
+  key: 'products-listing',
+  default: () => []
+})
+const { data: categories } = await useFetch('/api/categories', {
+  key: 'products-categories',
+  default: () => []
+})
 
 // ===========================
 // FILTERS STATE
@@ -105,31 +111,26 @@ const showFilters = ref(false)
 <template>
   <LayoutNavbar />
 
-  <LayoutContainer>
-    <div class="py-10">
+  <div class="bg-gray-950 min-h-screen py-10 px-6">
+    <div class="max-w-7xl mx-auto">
 
       <!-- TOP BAR -->
-      <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-bold">All Products
-          <span class="text-base font-normal text-gray-500 ml-2">({{ filteredProducts.length }} results)</span>
-        </h1>
-
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <p class="text-orange-400 text-xs uppercase tracking-widest font-bold mb-1">Catalogue</p>
+          <h1 class="text-3xl font-black text-white">All Products
+            <span class="text-base font-normal text-gray-500 ml-2">({{ filteredProducts.length }})</span>
+          </h1>
+        </div>
         <div class="flex items-center gap-3">
-          <!-- SORT -->
-          <select
-            v-model="sortBy"
-            class="border rounded-lg px-3 py-2 text-sm focus:outline-none"
-          >
+          <select v-model="sortBy"
+            class="bg-gray-900 border border-gray-700 text-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-orange-500 transition">
             <option value="newest">Newest</option>
             <option value="price_asc">Price: Low to High</option>
             <option value="price_desc">Price: High to Low</option>
           </select>
-
-          <!-- mobile filter toggle -->
-          <button
-            @click="showFilters = !showFilters"
-            class="md:hidden border px-4 py-2 rounded-lg text-sm"
-          >
+          <button @click="showFilters = !showFilters"
+            class="md:hidden bg-gray-900 border border-gray-700 px-4 py-2 rounded-xl text-sm text-gray-300">
             Filters
           </button>
         </div>
@@ -137,135 +138,75 @@ const showFilters = ref(false)
 
       <div class="flex gap-8">
 
-        <!-- ===========================
-             SIDEBAR FILTERS
-        =========================== -->
-        <aside
-          :class="[
-            'w-64 shrink-0 space-y-6',
-            showFilters ? 'block' : 'hidden md:block'
-          ]"
-        >
+        <!-- SIDEBAR -->
+        <aside :class="['w-60 shrink-0 space-y-6', showFilters ? 'block' : 'hidden md:block']">
 
-          <!-- RESET -->
           <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-sm uppercase tracking-wide">Filters</h2>
-            <button
-              @click="resetFilters"
-              class="text-xs text-gray-500 underline hover:text-black"
-            >
+            <h2 class="font-bold text-sm uppercase tracking-wide text-gray-400">Filters</h2>
+            <button @click="resetFilters"
+              class="text-xs text-orange-400 hover:text-orange-300 transition underline">
               Reset all
             </button>
           </div>
 
           <!-- CATEGORY -->
-          <div>
-            <h3 class="font-medium mb-3 text-sm">Category</h3>
-            <div class="space-y-2">
-              <label class="flex items-center gap-2 text-sm cursor-pointer">
-                <input
-                  type="radio"
-                  v-model="selectedCategory"
-                  value=""
-                  class="accent-black"
-                />
-                All Categories
-              </label>
-              <label
-                v-for="c in categories"
-                :key="c.id"
-                class="flex items-center gap-2 text-sm cursor-pointer"
-              >
-                <input
-                  type="radio"
-                  v-model="selectedCategory"
-                  :value="String(c.id)"
-                  class="accent-black"
-                />
-                {{ c.name }}
-              </label>
-            </div>
+          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 space-y-2">
+            <h3 class="font-bold text-sm text-white mb-3">Category</h3>
+            <label class="flex items-center gap-2 text-sm cursor-pointer text-gray-400 hover:text-white transition">
+              <input type="radio" v-model="selectedCategory" value="" class="accent-orange-500" />
+              All Categories
+            </label>
+            <label v-for="c in categories?.filter(c => !c.parent_id)" :key="c.id"
+              class="flex items-center gap-2 text-sm cursor-pointer text-gray-400 hover:text-white transition">
+              <input type="radio" v-model="selectedCategory" :value="String(c.id)" class="accent-orange-500" />
+              {{ c.name }}
+            </label>
           </div>
 
           <!-- PRICE RANGE -->
-          <div>
-            <h3 class="font-medium mb-3 text-sm">Price Range</h3>
+          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4">
+            <h3 class="font-bold text-sm text-white mb-3">Price Range</h3>
             <div class="flex items-center gap-2">
-              <input
-                v-model="minPrice"
-                type="number"
-                placeholder="Min"
-                class="border rounded px-2 py-1 w-full text-sm focus:outline-none"
-              />
-              <span class="text-gray-400">-</span>
-              <input
-                v-model="maxPrice"
-                type="number"
-                placeholder="Max"
-                class="border rounded px-2 py-1 w-full text-sm focus:outline-none"
-              />
+              <input v-model="minPrice" type="number" placeholder="Min"
+                class="bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl px-3 py-2 w-full text-xs focus:outline-none focus:border-orange-500" />
+              <span class="text-gray-600">-</span>
+              <input v-model="maxPrice" type="number" placeholder="Max"
+                class="bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl px-3 py-2 w-full text-xs focus:outline-none focus:border-orange-500" />
             </div>
           </div>
 
           <!-- BRAND -->
-          <div v-if="brands.length > 0">
-            <h3 class="font-medium mb-3 text-sm">Brand</h3>
-            <div class="space-y-2">
-              <label class="flex items-center gap-2 text-sm cursor-pointer">
-                <input
-                  type="radio"
-                  v-model="selectedBrand"
-                  value=""
-                  class="accent-black"
-                />
-                All Brands
-              </label>
-              <label
-                v-for="brand in brands"
-                :key="brand"
-                class="flex items-center gap-2 text-sm cursor-pointer"
-              >
-                <input
-                  type="radio"
-                  v-model="selectedBrand"
-                  :value="brand"
-                  class="accent-black"
-                />
-                {{ brand }}
-              </label>
-            </div>
+          <div v-if="brands.length > 0" class="bg-gray-900 border border-gray-800 rounded-2xl p-4 space-y-2">
+            <h3 class="font-bold text-sm text-white mb-3">Brand</h3>
+            <label class="flex items-center gap-2 text-sm cursor-pointer text-gray-400 hover:text-white transition">
+              <input type="radio" v-model="selectedBrand" value="" class="accent-orange-500" />
+              All Brands
+            </label>
+            <label v-for="brand in brands" :key="brand"
+              class="flex items-center gap-2 text-sm cursor-pointer text-gray-400 hover:text-white transition">
+              <input type="radio" v-model="selectedBrand" :value="brand" class="accent-orange-500" />
+              {{ brand }}
+            </label>
           </div>
 
         </aside>
 
-        <!-- ===========================
-             PRODUCTS GRID
-        =========================== -->
+        <!-- GRID -->
         <div class="flex-1">
-
-          <!-- no results -->
-          <div
-            v-if="filteredProducts.length === 0"
-            class="text-center py-20 text-gray-400"
-          >
-            No products found. Try adjusting your filters.
+          <div v-if="filteredProducts.length === 0"
+            class="text-center py-20 text-gray-500">
+            <p class="text-4xl mb-3">🔍</p>
+            <p class="text-lg font-bold text-white mb-1">No products found</p>
+            <p>Try adjusting your filters</p>
           </div>
 
-          <div
-            v-else
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            <ProductCard
-              v-for="p in filteredProducts"
-              :key="p.id"
-              :product="p"
-            />
+          <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <ProductCard v-for="p in filteredProducts" :key="p.id" :product="p" />
           </div>
-
         </div>
       </div>
     </div>
-  </LayoutContainer>
+  </div>
 
   <LayoutFooter />
 </template>

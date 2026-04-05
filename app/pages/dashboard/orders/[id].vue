@@ -2,10 +2,11 @@
 const route = useRoute()
 const { token } = useAuth()
 
-const { data: order } = await useFetch(`/api/orders/${route.params.id}`, {
-  headers: { Authorization: `Bearer ${token.value}` }
+const { data: orders } = await useFetch('/api/orders', {
+  key: 'user-orders',
+  headers: { Authorization: `Bearer ${token.value}` },
+  default: () => []
 })
-
 useHead({ title: computed(() => `Order #${order.value?.id}`) })
 
 const statusColor = (s) => ({

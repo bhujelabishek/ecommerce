@@ -1,103 +1,101 @@
 <script setup>
-useHead({ title: 'Cart - HookahStore' })
-
+useHead({ title: 'Cart - SmokeHaven' })
 const { cart, remove, updateQty, total, count } = useCart()
 </script>
 
 <template>
   <LayoutNavbar />
 
-  <LayoutContainer>
-    <div class="py-12">
-      <h1 class="text-2xl font-bold mb-8">
-        Your Cart
-        <span class="text-base font-normal text-gray-500 ml-2">({{ count }} items)</span>
-      </h1>
+  <div class="bg-gray-950 min-h-screen py-12 px-6">
+    <div class="max-w-7xl mx-auto">
 
-      <!-- EMPTY -->
-      <div v-if="cart.length === 0" class="text-center py-20">
-        <p class="text-gray-400 text-lg mb-4">Your cart is empty</p>
+      <div class="mb-8">
+        <p class="text-orange-400 text-xs uppercase tracking-widest font-bold mb-1">Shopping</p>
+        <h1 class="text-3xl font-black text-white">Your Cart
+          <span class="text-base font-normal text-gray-500 ml-2">({{ count }} items)</span>
+        </h1>
+      </div>
+
+      <div v-if="cart.length === 0" class="text-center py-24">
+        <div class="w-20 h-20 bg-gray-900 border border-gray-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <span class="text-4xl">🛒</span>
+        </div>
+        <p class="text-gray-400 text-lg mb-2">Your cart is empty</p>
+        <p class="text-gray-600 text-sm mb-8">Add some premium products to get started</p>
         <NuxtLink to="/products"
-          class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition">
-          Shop Now
+          class="bg-orange-500 hover:bg-orange-400 text-white font-bold px-8 py-3 rounded-full transition">
+          Browse Products
         </NuxtLink>
       </div>
 
-      <!-- CART ITEMS -->
-      <div v-else class="grid lg:grid-cols-3 gap-10">
+      <div v-else class="grid lg:grid-cols-3 gap-8">
 
-        <!-- ITEMS LIST -->
+        <!-- ITEMS -->
         <div class="lg:col-span-2 space-y-4">
-          <div
-            v-for="item in cart"
-            :key="item.id"
-            class="flex gap-4 bg-white border rounded-xl p-4"
-          >
+          <div v-for="item in cart" :key="item.id"
+            class="flex gap-4 bg-gray-900 border border-gray-800 rounded-2xl p-4 hover:border-gray-700 transition">
             <img :src="item.image" :alt="item.name"
-              class="w-24 h-24 object-cover rounded-lg flex-shrink-0" />
+              class="w-24 h-24 object-cover rounded-xl flex-shrink-0 border border-gray-800" />
 
             <div class="flex-1">
-              <h3 class="font-semibold">{{ item.name }}</h3>
-              <p class="text-gray-500 text-sm">{{ item.category }}</p>
-              <p class="font-bold mt-1">₨{{ item.price }}</p>
+              <p class="text-xs text-orange-400 uppercase tracking-wide mb-1">{{ item.category }}</p>
+              <h3 class="font-bold text-white">{{ item.name }}</h3>
+              <p class="font-bold text-orange-400 mt-1">₨{{ Number(item.price).toLocaleString() }}</p>
             </div>
 
             <div class="flex flex-col items-end justify-between">
-              <!-- QTY -->
-              <div class="flex items-center border rounded-lg">
+              <div class="flex items-center bg-gray-800 border border-gray-700 rounded-xl overflow-hidden">
                 <button @click="updateQty(item.id, item.qty - 1)"
-                  class="px-3 py-1 hover:bg-gray-100 transition">-</button>
-                <span class="px-3 text-sm">{{ item.qty }}</span>
+                  class="px-3 py-1.5 hover:bg-gray-700 text-gray-300 hover:text-white transition text-lg">-</button>
+                <span class="px-3 py-1.5 text-white text-sm font-medium border-x border-gray-700">{{ item.qty }}</span>
                 <button @click="updateQty(item.id, item.qty + 1)"
-                  class="px-3 py-1 hover:bg-gray-100 transition">+</button>
+                  class="px-3 py-1.5 hover:bg-gray-700 text-gray-300 hover:text-white transition text-lg">+</button>
               </div>
 
-              <!-- SUBTOTAL -->
-              <p class="font-semibold text-sm">
+              <p class="font-bold text-white text-sm">
                 ₨{{ (Number(item.price) * item.qty).toLocaleString() }}
               </p>
 
-              <!-- REMOVE -->
               <button @click="remove(item.id)"
-                class="text-red-500 text-xs hover:underline">
+                class="text-red-400 text-xs hover:text-red-300 transition hover:underline">
                 Remove
               </button>
             </div>
           </div>
         </div>
 
-        <!-- ORDER SUMMARY -->
-        <div class="bg-white border rounded-xl p-6 h-fit space-y-4 sticky top-28">
-          <h2 class="font-bold text-lg">Order Summary</h2>
+        <!-- SUMMARY -->
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 h-fit sticky top-28 space-y-4">
+          <h2 class="font-bold text-lg text-white">Order Summary</h2>
 
-          <div class="space-y-2 text-sm">
-            <div class="flex justify-between">
-              <span class="text-gray-500">Subtotal ({{ count }} items)</span>
-              <span>₨{{ total.toLocaleString() }}</span>
+          <div class="space-y-3 text-sm">
+            <div class="flex justify-between text-gray-400">
+              <span>Subtotal ({{ count }} items)</span>
+              <span class="text-white">₨{{ total.toLocaleString() }}</span>
             </div>
-            <div class="flex justify-between">
-              <span class="text-gray-500">Shipping</span>
-              <span class="text-green-600">Free</span>
+            <div class="flex justify-between text-gray-400">
+              <span>Shipping</span>
+              <span class="text-green-400 font-medium">Free</span>
             </div>
-            <div class="border-t pt-2 flex justify-between font-bold text-base">
-              <span>Total</span>
-              <span>₨{{ total.toLocaleString() }}</span>
+            <div class="border-t border-gray-800 pt-3 flex justify-between font-bold text-base">
+              <span class="text-white">Total</span>
+              <span class="text-orange-400">₨{{ total.toLocaleString() }}</span>
             </div>
           </div>
 
           <NuxtLink to="/checkout"
-            class="block w-full bg-black text-white text-center py-3 rounded-lg hover:bg-gray-800 transition">
+            class="block w-full bg-orange-500 hover:bg-orange-400 text-white text-center py-3.5 rounded-xl font-bold transition text-sm uppercase tracking-widest">
             Proceed to Checkout
           </NuxtLink>
 
           <NuxtLink to="/products"
-            class="block w-full border text-center py-3 rounded-lg hover:bg-gray-50 transition text-sm">
+            class="block w-full border border-gray-700 hover:border-gray-600 text-gray-300 hover:text-white text-center py-3 rounded-xl transition text-sm">
             Continue Shopping
           </NuxtLink>
         </div>
       </div>
     </div>
-  </LayoutContainer>
+  </div>
 
   <LayoutFooter />
 </template>

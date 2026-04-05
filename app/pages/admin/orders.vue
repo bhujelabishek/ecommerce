@@ -9,7 +9,9 @@ definePageMeta({
 const { token } = useAuth()
 
 const { data: orders, refresh } = await useFetch('/api/admin/orders', {
-  headers: { Authorization: `Bearer ${token.value}` }
+  key: 'admin-orders',
+  headers: { Authorization: `Bearer ${token.value}` },
+  default: () => []
 })
 
 // STATUS HELPERS

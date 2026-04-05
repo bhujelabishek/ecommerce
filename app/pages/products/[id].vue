@@ -4,12 +4,19 @@ const { token, user } = useAuth()
 
 // ✅ server:false for reviews to avoid SSR route conflict
 const { data: product, refresh: refreshProduct } = await useFetch(
-  `/api/products/${route.params.id}`
+  `/api/products/${route.params.id}`,
+  {
+    key: `product-${route.params.id}`,
+    default: () => null
+  }
 )
-
 const { data: reviews, refresh: refreshReviews } = await useFetch(
   `/api/products/${route.params.id}/reviews`,
-  { server: false, default: () => [] }
+  {
+    key: `reviews-${route.params.id}`,
+    server: false,
+    default: () => []
+  }
 )
 
 useHead({

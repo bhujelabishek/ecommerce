@@ -5,6 +5,7 @@ definePageMeta({
   middleware: 'auth'  
 })
 
+
 const { token } = useAuth() 
 
 const products = ref([])
